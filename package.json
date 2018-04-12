@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/mrdulin/nodejs-graphql#readme",
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2"
