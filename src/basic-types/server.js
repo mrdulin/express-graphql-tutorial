@@ -9,7 +9,6 @@ const schema = buildSchema(`
     rollOnce: Int!
     roll(numRolls: Int!): [Int]
   }
-
   type Query {
     hello: String
     quoteOfTheDay: String
