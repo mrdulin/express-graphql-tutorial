@@ -1,6 +1,7 @@
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
-const { buildSchema } = require('graphql');
+const { buildSchema, graphql } = require('graphql');
+const rp = require('request-promise');
 
 const schema = buildSchema(`
   type Query {
@@ -24,12 +25,58 @@ const root = {
 
 const app = express();
 app.use(
-  '/graphql',
+  '/graphiql',
   graphqlHTTP({
     schema,
     rootValue: root,
     graphiql: true
   })
 );
-app.listen(4000);
-console.log('Running a GraphQL API server at localhost:4000/graphql');
+
+app.get('/basictypes', (req, res) => {
+  const { graphqlQuery } = req.query;
+  if (!graphqlQuery) {
+    return res.status(500).send('You must provide a query');
+  }
+  return graphql(schema, graphqlQuery, root)
+    .then(response => response.data)
+    .then(data => {
+      return res.json(data);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).end(err.message);
+    });
+});
+
+function clientRequest(query) {
+  return rp({
+    baseUrl: 'http://localhost:4000',
+    uri: '/basictypes',
+    qs: {
+      graphqlQuery: query
+    },
+    resolveWithFullResponse: true,
+    json: true
+  });
+}
+
+app.listen(4000, () => {
+  console.log('Running a GraphQL API server at localhost:4000/graphiql');
+
+  setTimeout(() => {
+    console.log('start request...');
+    const query = `
+      {
+        quoteOfTheDay
+      }
+    `;
+    clientRequest(query)
+      .then(data => {
+        console.log(data.body);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }, 2000);
+});
