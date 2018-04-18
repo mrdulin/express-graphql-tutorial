@@ -16,9 +16,11 @@ const app = express();
 app.use(
   '/graphql',
   graphqlHTTP({
+    // objectSchema中的Query已经定义了resolver，本例子可以正常查询，使用new GraphQLSchema()创建带有resolver的schema，是否确定可以省略rootValue?
     schema: objectSchema,
+
     // schema: stringSchema,
-    rootValue: root,
+    // rootValue: root,
     graphiql: true
   })
 );
