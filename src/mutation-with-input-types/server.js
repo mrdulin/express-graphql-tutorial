@@ -3,9 +3,10 @@ const graphqlHTTP = require('express-graphql');
 const { buildSchema } = require('graphql');
 
 const root = require('./resolver');
+const config = require('../config');
 
 const app = express();
-const port = 4000;
+
 const schemaTemplate = `
   input MessageInput {
     content: String
@@ -28,18 +29,25 @@ const schemaTemplate = `
   }
 `;
 
-const GRAPHQL_ROUTE = '/graphql';
 const schema = buildSchema(schemaTemplate);
 
-app.use(
-  GRAPHQL_ROUTE,
-  graphqlHTTP({
-    schema,
-    rootValue: root,
-    graphiql: true
-  })
-);
+function start(done) {
+  app.use(
+    config.GRAPHQL_ROUTE,
+    graphqlHTTP({
+      schema,
+      rootValue: root,
+      graphiql: true
+    })
+  );
+  return app.listen(config.PORT, () => {
+    if (done) done();
+    console.log(`Server is listening on http://localhost:${config.PORT}${config.GRAPHQL_ROUTE}`);
+  });
+}
 
-app.listen(port, () => {
-  console.log(`Server is listening on http://localhost:${port}${GRAPHQL_ROUTE}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  start();
+}
+
+module.exports = start;
