@@ -38,6 +38,30 @@ describe('mutation with input types test suites', () => {
     });
   });
 
+  it('should do the mutation correctly with operationName and variables, and operationName same with mutation name', () => {
+    const body = {
+      query: `
+        mutation createMessage($input: MessageInput) {
+          createMessage(input: $input) {
+            id
+            content
+            author
+          }
+        }
+      `,
+      variables: {
+        input: {
+          author: 'mmm',
+          content: 'I like her so much'
+        }
+      }
+    };
+
+    return rp(body).then(res => {
+      expect(res.data).to.have.property('createMessage');
+    });
+  });
+
   it('should do the mutation correctly without operationName and variables', () => {
     const body = {
       query: `
