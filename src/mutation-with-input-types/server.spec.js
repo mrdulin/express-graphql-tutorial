@@ -56,8 +56,49 @@ describe('mutation with input types test suites', () => {
     });
   });
 
-  // mutation中, JSON.stringify() input type类型的数据，graphql会报语法错误
-  it('t-3', () => {
+  it('should not pass when pass wrong parameters to body - 1', () => {
+    const author = 'hhh';
+    const content = 'I love her';
+
+    const body = {
+      query: `
+        mutation {
+          createMessage(input: {author: ${author}, content: ${content}}) {
+            id
+            content
+            author
+          }
+        }
+      `
+    };
+
+    return rp(body).then(res => {
+      expect(res.data).to.have.property('createMessage');
+    });
+  });
+
+  it('should not pass when pass wrong parameters to body - 2', () => {
+    const author = "'hhh'";
+    const content = "'I want to marry her'";
+
+    const body = {
+      query: `
+        mutation {
+          createMessage(input: {author: ${author}, content: ${content}}) {
+            id
+            content
+            author
+          }
+        }
+      `
+    };
+
+    return rp(body).then(res => {
+      expect(res.data).to.have.property('createMessage');
+    });
+  });
+
+  it('should not pass when pass wrong parameters to body - 3', () => {
     const messageInput = {
       author: 'hhh',
       content: 'I like her so much'
@@ -67,6 +108,27 @@ describe('mutation with input types test suites', () => {
       query: `
         mutation {
           createMessage(input: ${JSON.stringify(messageInput)}) {
+            id
+            content
+            author
+          }
+        }
+      `
+    };
+
+    return rp(body).then(res => {
+      expect(res.data).to.have.property('createMessage');
+    });
+  });
+
+  it('should pass when pass correct parameters to body', () => {
+    const author = '"hhh"';
+    const content = '"I love her"';
+
+    const body = {
+      query: `
+        mutation {
+          createMessage(input: {author: ${author}, content: ${content}}) {
             id
             content
             author
