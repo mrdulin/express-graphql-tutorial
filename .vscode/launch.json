@@ -7,8 +7,9 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "debug",
-      "program": "${file}"
+      "name": "Launch Program",
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "args": ["${file}"]
     }
   ]
 }
