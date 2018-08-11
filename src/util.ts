@@ -1,17 +1,17 @@
-import * as request from 'request-promise';
+import requestPromise, { RequestPromise } from 'request-promise';
 import { createLogger, transports, format, Logger } from 'winston';
 
 import { config } from './config';
 
-function rp(body: object) {
+function rp(body: object): RequestPromise {
   const options = {
-    uri: `http://localhost:${config.PORT}${config.GRAPHQL_ROUTE}`,
+    uri: config.GRAPHQL_ENDPOINT,
     method: 'POST',
     json: true,
     body
   };
 
-  return request(options);
+  return requestPromise(options);
 }
 
 function createAppLogger(): Logger {
@@ -23,7 +23,8 @@ function createAppLogger(): Logger {
       timestamp(),
       printf(
         (info): string => {
-          return `${info.timestamp} [${info.level}] : ${JSON.stringify(info.message)}`;
+          const label: string = info.label ? ' ' + info.label + ' ' : '';
+          return `${info.timestamp}${label}[${info.level}] : ${JSON.stringify(info.message)}`;
         }
       )
     ),
