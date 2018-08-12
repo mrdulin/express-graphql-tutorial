@@ -29,6 +29,10 @@ describe('constructor types test suites', () => {
             posts {
               id
               content
+              author {
+                id
+                name
+              }
             }
           }
         }
@@ -41,12 +45,21 @@ describe('constructor types test suites', () => {
     const user: IUser | undefined = UserConnector.findUserById(USER_ID1);
 
     if (user) {
-      const posts: IPost[] = PostConnector.findPostsByUserId(user.id);
+      const posts: IPost[] = PostConnector.findPostsByUserId(user.id).map(
+        (post: IPost): IPost => ({ id: post.id, content: post.content })
+      );
+
       const userResult: IUser & { posts: IPost[] } = {
         ...user,
-        posts
+        posts: posts.map((post: IPost) => {
+          return {
+            ...post,
+            author: user
+          };
+        })
       };
       const actualValue = await rp(body);
+      logger.info(actualValue);
       const expectValue = {
         data: {
           user: userResult

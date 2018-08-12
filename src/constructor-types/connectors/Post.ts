@@ -14,7 +14,7 @@ const PostConnector: IPostConnector = {
         }
       }
     );
-    return posts.map((post: IPost): IPost => ({ id: post.id, content: post.content }));
+    return posts;
   }
 };
 

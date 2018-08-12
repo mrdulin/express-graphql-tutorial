@@ -29,3 +29,5 @@ http://graphql.cn/graphql-js/graphql-clients/
 https://github.com/apollographql/GitHunt-React
 
 https://github.com/CaveOfCodeBlog/simple-apollo-server
+
+https://www.prisma.io/blog/graphql-server-basics-the-schema-ac5e2950214e/

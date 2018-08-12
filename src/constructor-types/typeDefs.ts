@@ -1,9 +1,10 @@
 import { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLSchemaConfig, GraphQLNonNull, GraphQLList } from 'graphql';
-import { db, IPost, IUser } from './db';
-import { IUserConnector, PostConnector } from './connectors';
+import { IPost, IUser } from './db';
+import { UserConnector, PostConnector, IUserConnector } from './connectors';
 
 const UserType: GraphQLObjectType = new GraphQLObjectType({
   name: 'User',
+  description: 'user',
 
   // When two types need to refer to each other, or a type needs to refer to itself in a field,
   // you can use a function expression (aka a closure or a thunk) to supply the fields lazily.
@@ -21,13 +22,14 @@ const UserType: GraphQLObjectType = new GraphQLObjectType({
 
 const PostType: GraphQLObjectType = new GraphQLObjectType({
   name: 'Post',
+  description: 'post',
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLID) },
     content: { type: new GraphQLNonNull(GraphQLString) },
     author: {
       type: UserType,
-      resolve: (_, args) => {
-        return db.users[0];
+      resolve: (post: IPost) => {
+        return UserConnector.findUserById(post.authorId);
       }
     }
   })
@@ -35,6 +37,7 @@ const PostType: GraphQLObjectType = new GraphQLObjectType({
 
 const QueryType: GraphQLObjectType = new GraphQLObjectType({
   name: 'Query',
+  description: 'query',
   fields: {
     user: {
       type: UserType,
@@ -43,14 +46,16 @@ const QueryType: GraphQLObjectType = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLID) }
       },
       resolve: (_, { id }, ctx) => {
-        return ctx.UserConnector.findUserById(id);
+        const { UserConnector: User }: { UserConnector: IUserConnector } = ctx;
+        return User.findUserById(id);
       }
     },
     users: {
       type: new GraphQLList(UserType),
       description: 'query all users',
       resolve: (_, args, ctx) => {
-        return ctx.UserConnector.findAllUsers();
+        const { UserConnector: User }: { UserConnector: IUserConnector } = ctx;
+        return User.findAllUsers();
       }
     }
   }
