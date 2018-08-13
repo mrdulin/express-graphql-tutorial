@@ -1,4 +1,6 @@
-使用 grahpiql 查询，输入：
+# graphql fragment
+
+query:
 
 ```graphql
 query {
@@ -16,7 +18,7 @@ fragment UserFragment on Hero {
 }
 ```
 
-输出:
+response:
 
 ```graphql
 {
