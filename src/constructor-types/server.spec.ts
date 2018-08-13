@@ -2,10 +2,11 @@ import { expect } from 'chai';
 import { Done } from 'mocha';
 import http from 'http';
 
-import { start } from './server';
+import { start, schema } from './server';
 import { rp, logger } from '../util';
 import { IUser, IPost } from './db';
 import { PostConnector, UserConnector } from './connectors';
+import { graphql, ExecutionResult } from 'graphql';
 
 let server: http.Server;
 before('start server', (done: Done) => {
@@ -90,5 +91,55 @@ describe('constructor types test suites', () => {
     };
 
     expect(actualValue).to.eql(expectValue);
+  });
+
+  it('should throw an error when lack of "id" argument for user query', async () => {
+    const body = {
+      query: `
+        query user{
+          user {
+            id
+            name
+          }
+        }
+      `
+    };
+
+    try {
+      await rp(body);
+    } catch (err) {
+      expect(err).to.be.an.instanceof(Error);
+      logger.error(err);
+    }
+  });
+
+  it('should be return correct for user query using graphql', async () => {
+    const query = `
+      query user($id: ID!) {
+        user(id: $id) {
+          id
+          name
+        }
+      }
+    `;
+
+    const actualValue: ExecutionResult<{ user: IUser }> = await graphql<{ user: IUser }>({
+      schema,
+      source: query,
+      contextValue: {
+        UserConnector
+      },
+      variableValues: {
+        id: USER_ID1
+      }
+    });
+
+    const expectValue: ExecutionResult<{ user: IUser }> = {
+      data: {
+        user: UserConnector.findUserById(USER_ID1) as IUser
+      }
+    };
+
+    expect(actualValue).to.deep.equal(expectValue);
   });
 });

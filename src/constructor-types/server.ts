@@ -42,4 +42,4 @@ if (process.env.NODE_ENV !== 'test') {
   start();
 }
 
-export { start };
+export { start, schema };

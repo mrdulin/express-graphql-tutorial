@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha --timeout=3000 --require=ts-node/register"
+    "test": "NODE_ENV=test mocha --timeout=3000 --require=ts-node/register",
+    "test:all": "npm test -- ./src/**/*.spec.ts"
   },
   "repository": {
     "type": "git",

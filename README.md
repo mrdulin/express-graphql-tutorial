@@ -1,16 +1,20 @@
 # nodejs-graphql
 
-## testing
+## Usage
+
+Vscode, change `typescript` version to local version: `3.0.1`
+
+## Testing
 
 ```bash
 npm test -- src/constructor-types/server.spec.ts
 ```
 
-## `express-graphql`和`apollo-server`的比较
+## `express-graphql` VS `apollo-server`
 
 https://github.com/apollographql/apollo-server#comparison-with-express-graphql
 
-## 学习资源
+## Resources
 
 https://marmelab.com/blog/2017/09/06/dive-into-graphql-part-iii-building-a-graphql-server-with-nodejs.html#building-a-basic-graphql-server
 
