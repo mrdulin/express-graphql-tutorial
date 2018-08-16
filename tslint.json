@@ -6,7 +6,8 @@
     "ordered-imports": false,
     "quotemark": [true, "single", "jsx-single", "avoid-escape"],
     "object-literal-sort-keys": false,
-    "trailing-comma": false
+    "trailing-comma": false,
+    "max-classes-per-file": false
   },
   "rulesDirectory": []
 }

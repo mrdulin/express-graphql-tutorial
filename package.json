@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/mrdulin/nodejs-graphql#readme",
   "dependencies": {
+    "casual": "^1.5.19",
     "crypto": "^1.0.1",
     "dataloader": "^1.4.0",
     "express": "^4.16.3",
@@ -27,6 +28,7 @@
     "lodash": "^4.17.10",
     "request": "^2.85.0",
     "request-promise": "^4.2.2",
+    "shortid": "^2.2.13",
     "winston": "^3.0.0"
   },
   "devDependencies": {
@@ -38,6 +40,7 @@
     "@types/mocha": "^5.2.5",
     "@types/request": "^2.47.1",
     "@types/request-promise": "^4.1.42",
+    "@types/shortid": "0.0.29",
     "chai": "^4.1.2",
     "mocha": "^5.1.1",
     "ts-node": "^7.0.0",
