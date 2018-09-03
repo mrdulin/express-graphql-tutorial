@@ -14,7 +14,7 @@
       "env": {
         "NODE_ENV": "test"
       },
-      "internalConsoleOptions": "openOnSessionStart"
+      "console": "integratedTerminal"
     },
     {
       "type": "node",

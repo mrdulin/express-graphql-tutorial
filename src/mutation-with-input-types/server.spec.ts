@@ -1,15 +1,17 @@
-const { expect } = require('chai');
+import { expect } from 'chai';
+import http from 'http';
+import { Done } from 'mocha';
+import { ExecutionResult } from 'graphql';
 
-const startServer = require('./server');
-const { rp } = require('../util');
+import { start } from './server';
+import { rp } from '../util';
 
-let server;
-
-before(done => {
-  server = startServer(done);
+let server: http.Server;
+before(async () => {
+  server = await start();
 });
 
-after(done => {
+after((done: Done) => {
   server.close(done);
 });
 
@@ -17,8 +19,8 @@ describe('mutation with input types test suites', () => {
   it('should do the mutation correctly with operationName and variables', () => {
     const body = {
       query: `
-        mutation createMessageForTest($input: MessageInput) {
-          createMessage(input: $input) {
+        mutation createMessageForTest($message: MessageInput!) {
+          createMessage(message: $message) {
             id
             content
             author
@@ -26,7 +28,7 @@ describe('mutation with input types test suites', () => {
         }
       `,
       variables: {
-        input: {
+        message: {
           author: 'mmm',
           content: 'I like her so much'
         }
@@ -41,8 +43,8 @@ describe('mutation with input types test suites', () => {
   it('should do the mutation correctly with operationName and variables, and operationName same with mutation name', () => {
     const body = {
       query: `
-        mutation createMessage($input: MessageInput) {
-          createMessage(input: $input) {
+        mutation createMessage($message: MessageInput!) {
+          createMessage(message: $message) {
             id
             content
             author
@@ -50,7 +52,7 @@ describe('mutation with input types test suites', () => {
         }
       `,
       variables: {
-        input: {
+        message: {
           author: 'mmm',
           content: 'I like her so much'
         }
@@ -66,7 +68,7 @@ describe('mutation with input types test suites', () => {
     const body = {
       query: `
         mutation {
-          createMessage(input: {author: "hhh", content: "I love her"}) {
+          createMessage(message: {author: "hhh", content: "I love her"}) {
             id
             content
             author
@@ -87,7 +89,7 @@ describe('mutation with input types test suites', () => {
     const body = {
       query: `
         mutation {
-          createMessage(input: {author: ${author}, content: ${content}}) {
+          createMessage(message: {author: ${author}, content: ${content}}) {
             id
             content
             author
@@ -108,7 +110,7 @@ describe('mutation with input types test suites', () => {
     const body = {
       query: `
         mutation {
-          createMessage(input: {author: ${author}, content: ${content}}) {
+          createMessage(message: {author: ${author}, content: ${content}}) {
             id
             content
             author
@@ -131,7 +133,7 @@ describe('mutation with input types test suites', () => {
     const body = {
       query: `
         mutation {
-          createMessage(input: ${JSON.stringify(messageInput)}) {
+          createMessage(message: ${JSON.stringify(messageInput)}) {
             id
             content
             author
@@ -152,7 +154,7 @@ describe('mutation with input types test suites', () => {
     const body = {
       query: `
         mutation {
-          createMessage(input: {author: ${author}, content: ${content}}) {
+          createMessage(message: {author: ${author}, content: ${content}}) {
             id
             content
             author
