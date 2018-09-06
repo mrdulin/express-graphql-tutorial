@@ -14,8 +14,14 @@ const root: any = {
   hello: (): string => 'Hello, World'
 };
 
-graphql(schema, '{hello}', root)
-  .then((res: ExecutionResult) => {
+const query: string = `
+  {
+    hello
+  }
+`;
+
+graphql<{ hello: string }>(schema, query, root)
+  .then((res: ExecutionResult<{ hello: string }>) => {
     logger.info(res);
   })
   .catch((err: any) => logger.error(err));
