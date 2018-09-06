@@ -21,7 +21,8 @@
       "request": "launch",
       "name": "Launch Program",
       "runtimeArgs": ["-r", "ts-node/register"],
-      "args": ["${file}"]
+      "args": ["${file}"],
+      "console": "integratedTerminal"
     }
   ]
 }
