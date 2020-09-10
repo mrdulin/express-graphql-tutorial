@@ -1,0 +1,6 @@
+query getAuthorsById($ids: [ID]!) {
+  authors(ids: $ids) {
+    name
+    id
+  }
+}
