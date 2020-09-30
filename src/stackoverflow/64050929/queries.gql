@@ -1,0 +1,16 @@
+query Something {
+  name
+  id
+}
+
+query SomethingElse($email: String!) {
+  somethingelse(email: $email) {
+    phone
+    ...SomeFragment
+  }
+}
+
+fragment SomeFragment on User {
+  email
+  address
+}
