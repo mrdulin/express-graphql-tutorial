@@ -1,0 +1,8 @@
+input GetExternalConfluencePage {
+  confluencePageId: String!
+}
+
+type ExternalConfluencePage {
+  title: String!
+  body: String!
+}
